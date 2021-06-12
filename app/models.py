@@ -64,6 +64,15 @@ class User(db.Model):
 
 
 
+class Roles(db.Model):
+    '''
+    defines the role of each user in the user model 
+    '''
+    id = db.Column(db.Integer,primary_key=True)
+    name = db.Column(db.String(30))
+    users = db.relationship('Users',backref='users',lazy= "dynamic")
+
+
 
 
 
