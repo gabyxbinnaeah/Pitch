@@ -5,7 +5,7 @@ class Config:
 
 class ProdConfig(Config):
     '''
-    Method that provides setting for proction
+    Method that provides setting for production
 
     Args: 
          Permits child class to inherit from class Config
