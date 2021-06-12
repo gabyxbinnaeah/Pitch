@@ -31,7 +31,18 @@ class PitchComments(db.Model):
     user_id=db.Column(db.Integer,db.ForeignKey("users.id"))
     date_posted=db.Column(db.DateTime,dafault=datetime.utcnow)
 
-    
+
+class Votes(db.Model):
+    '''
+    model that defines properties of votes
+    '''
+    __tablename__="votes"
+
+    id=db.Column(db.Integer,primary_key=True)
+    vote_count=db.Column(db.Integer)
+    user_id=db.Column(db.Integer,db.ForeignKey("users.id"))
+
+
 
 
     
