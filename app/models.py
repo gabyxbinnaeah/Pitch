@@ -23,7 +23,17 @@ class PitchComments(db.Model):
     '''
     model that defines the properties of comments
     '''
+    __tablename__='comments'
+
+    id=db.Column(db.Integer,primary_key=True)
+    title=db.Column(db.String(255))
+    content=db.Column(db.String(255))
+    user_id=db.Column(db.Integer,db.ForeignKey("users.id"))
+    date_posted=db.Column(db.DateTime,dafault=datetime.utcnow)
+
     
 
+
+    
     
 
