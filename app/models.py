@@ -54,7 +54,7 @@ class User(db.Model):
     __tablename__="users"
 
     id=db.Column(db.Integer,primary_key=True)
-    name=db.Column(db.String(255))
+    username=db.Column(db.String(255))
     user_bio=db.Column(db.String(255))
     photos=db.relationship('PhotoProfile',backref ='user',lazy= "dynamic")
     pitches=db.relationship('Pitch', backref ='pitches',lazy= "dynamic")
@@ -71,6 +71,17 @@ class Roles(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     name = db.Column(db.String(30))
     users = db.relationship('Users',backref='users',lazy= "dynamic")
+
+class PhotoProfile(db.Model):
+    '''
+    model that defines profile photos for user account
+    '''
+    __tablename__ ="photos"
+    
+    id=db.Column(db.Integer,primary_key=True)
+    pic_path=db.Column(db.String())
+    user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
+      
 
 
 
