@@ -16,6 +16,8 @@ class Pitch(db.Model):
     date_posted=db.Column(db.DateTime,default=datetime.utcnow)
     votes_id=db.Column(db.Integer,db.ForeignKey("votes.id"))
     posted_by=db.Column(db.Integer,db.ForeignKey("users.id"))
+    users=db.relationship('User',backref="user",lazy=dynamic)
+
 
 
 
@@ -41,6 +43,26 @@ class Votes(db.Model):
     id=db.Column(db.Integer,primary_key=True)
     vote_count=db.Column(db.Integer)
     user_id=db.Column(db.Integer,db.ForeignKey("users.id"))
+    pitches=db.relationship('Pitch',backref='pitches',lazy="dynamic")  
+
+
+
+class User(db.Model):
+    '''
+    models that dfeines properties of user class
+    '''
+    __tablename__="users"
+
+    id=db.Column(db.Integer,primary_key=True)
+    name=db.Column(db.String(255))
+    user_bio=db.Column(db.String(255))
+    photos=db.relationship('PhotoProfile',backref ='user',lazy= "dynamic")
+    pitches=db.relationship('Pitch', backref ='pitches',lazy= "dynamic")
+    pitch_id=db.Column(db.Integer,db.ForeignKey("pitches.id"))
+    email=db.Column(db.String(),unique = True,index = True)
+    role_id=db.Column(db.Integer,db.ForeignKey("roles.id"))
+
+
 
 
 
