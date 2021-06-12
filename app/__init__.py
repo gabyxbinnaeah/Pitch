@@ -17,7 +17,7 @@ def creat_app(configname):
     
     from . import main as main_blueprint 
      #register blueprint
-    app.register_blueprint(main_blueprint)
+    app.register_blueprint(main_blueprint) 
 
     return app    
 
