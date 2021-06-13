@@ -5,6 +5,9 @@ from . import login_manager
 from datetime import datetime 
 
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id)) 
 
 class Pitch(db.Model):
     '''
@@ -36,17 +39,17 @@ class PitchComments(db.Model):
     title=db.Column(db.String(255))
     content=db.Column(db.String(255))
     user_id=db.Column(db.Integer,db.ForeignKey("users.id"))
-    date_posted=db.Column(db.DateTime,dafault=datetime.utcnow) 
+    date_posted=db.Column(db.DateTime,default=datetime.utcnow) 
 
     def save(self):
         db.session.add(self)
-        db.session.commit()
+        db.session.commit() 
 
     @classmethod
     def get_comments(cls,id):
         comments=PitchComments.query.filter_by(pitch_id=id).all()
 
-        return comments
+        return comments  
 
 
 class Votes(db.Model):
@@ -62,7 +65,7 @@ class Votes(db.Model):
 
 
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     '''
     models that dfeines properties of user class
     '''
@@ -82,7 +85,7 @@ class User(db.Model):
     
     @property
     def passwords(self):
-        raise AttributeError('You can not read  the password attribute')
+        raise AttributeError('You can not acess  the password attribute')
 
     @password.setter
     def  password(self,password):
