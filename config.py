@@ -1,7 +1,11 @@
+import os 
+
 class Config:
     '''
     a method that provides general settings for application
     '''
+    SECRET_KEY=os.environ.get('SECRET_KEY')
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://moringa:silfanus12@localhost/pitch'
 
 class ProdConfig(Config):
     '''
@@ -22,5 +26,5 @@ class DevConfig(Config):
 
 config_options={
 'production':ProdConfig,
-'development':DeveConfig
+'development':DevConfig
 }

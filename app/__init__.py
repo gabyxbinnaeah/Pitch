@@ -10,15 +10,16 @@ bootstrap=Bootstrap()
 db=SQLAlchemy()
 #initializing app
 
-def creat_app(configname):
+def create_app(configname):
     app=Flask(__name__)
 
-    bootstrap.init_app(app) 
+    bootstrap.init_app(app)
+    db.init_app(app) 
 
     #configuration options
     app.config.from_object(config_options[configname])
     
-    from . import main as main_blueprint 
+    from .main import main as main_blueprint 
      #register blueprint
     app.register_blueprint(main_blueprint) 
 
