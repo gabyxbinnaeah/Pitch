@@ -1,5 +1,8 @@
-from . import db  
-from werkzeug.security import generate_password_hash,check_password_hash 
+from werkzeug.security import generate_password_hash,check_password_hash
+from . import db
+from flask_login import UserMixin
+from . import login_manager 
+from datetime import datetime 
 
 
 
@@ -17,6 +20,7 @@ class Pitch(db.Model):
     votes_id=db.Column(db.Integer,db.ForeignKey("votes.id"))
     posted_by=db.Column(db.Integer,db.ForeignKey("users.id"))
     users=db.relationship('User',backref="user",lazy=dynamic)
+    pitchescomment=db.relationship('PitchComments',backref ='pitchescomment',lazy= "dynamic")
 
 
 
@@ -28,10 +32,21 @@ class PitchComments(db.Model):
     __tablename__='comments'
 
     id=db.Column(db.Integer,primary_key=True)
+    pitch_id=db.Column(db.Integer,db.ForeignKey("pitches.id"))
     title=db.Column(db.String(255))
     content=db.Column(db.String(255))
     user_id=db.Column(db.Integer,db.ForeignKey("users.id"))
-    date_posted=db.Column(db.DateTime,dafault=datetime.utcnow)
+    date_posted=db.Column(db.DateTime,dafault=datetime.utcnow) 
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def get_comments(cls,id):
+        comments=PitchComments.query.filter_by(pitch_id=id).all()
+
+        return comments
 
 
 class Votes(db.Model):
@@ -58,10 +73,14 @@ class User(db.Model):
     user_bio=db.Column(db.String(255))
     photos=db.relationship('PhotoProfile',backref ='user',lazy= "dynamic")
     pitches=db.relationship('Pitch', backref ='pitches',lazy= "dynamic")
+    pitchcomments=db.relationship('PitchComments',backref ='pitchcomments',lazy= "dynamic")
     pitch_id=db.Column(db.Integer,db.ForeignKey("pitches.id"))
+    votes=db.relationship('Votes',backref ='votes',lazy= "dynamic")
     email=db.Column(db.String(),unique = True,index = True)
     role_id=db.Column(db.Integer,db.ForeignKey("roles.id"))
-
+    password_hash=db.Column(db.String(255)) 
+    
+    
 
 
 class Roles(db.Model):
@@ -77,7 +96,7 @@ class PhotoProfile(db.Model):
     model that defines profile photos for user account
     '''
     __tablename__ ="photos"
-    
+
     id=db.Column(db.Integer,primary_key=True)
     pic_path=db.Column(db.String())
     user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
