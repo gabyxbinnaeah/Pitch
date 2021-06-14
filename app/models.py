@@ -23,7 +23,7 @@ class Pitch(db.Model):
     pitchescomment=db.relationship('PitchComments',backref ='pitchescomment',lazy= "dynamic")
     date_posted=db.Column(db.DateTime,default=datetime.utcnow)
     upvotes=db.relationship('Upvotes', backref ='user',lazy= "dynamic")
-    downvotes=db.relationship('Down',backref='user',lazy= "dynamic")
+    downvotes=db.relationship('Downvotes',backref='user',lazy= "dynamic")
 
     @classmethod
     def get_pitches(cls,id):
@@ -41,32 +41,28 @@ class PitchComments(db.Model):
 
     id=db.Column(db.Integer,primary_key=True)
     pitch_id=db.Column(db.Integer,db.ForeignKey("pitches.id"))
-    title=db.Column(db.String(255))
-    content=db.Column(db.String(255))
     user_id=db.Column(db.Integer,db.ForeignKey("users.id"))
+    description=db.Column(db.String())  
     date_posted=db.Column(db.DateTime,default=datetime.utcnow) 
 
-    def save(self):
+
+class  Upvotes(db.model):
+    id=db.Column(db.Integer,)
+    upvote=db.Column(db.Integer,default=1)
+    pitch_id=db.Column(db.Integer,db.ForeignKey("pitches.id")) 
+    user_id=db.Column(db.Integer,db.ForeignKey("users.id"))  
+
+    def save_upvotes(self):
         db.session.add(self)
         db.session.commit() 
 
-    @classmethod
-    def get_comments(cls,id):
-        comments=PitchComments.query.filter_by(pitch_id=id).all()
-
-        return comments  
+    def add_upvotes(cls,id):
+        upvote_pitch= Upvotes(user=current_user,pitch_id=id) 
+        upvote_pitch.save_upvotes()
 
 
-class Votes(db.Model):
-    '''
-    model that defines properties of votes
-    '''
-    __tablename__="votes"
 
-    id=db.Column(db.Integer,primary_key=True)
-    vote_count=db.Column(db.Integer)
-    user_id=db.Column(db.Integer,db.ForeignKey("users.id"))
-    pitches=db.relationship('Pitch',backref='pitches',lazy="dynamic")  
+  
 
 
 
