@@ -42,8 +42,24 @@ def new_pitch():
         
 
         return redirect(url_for('main.index')) 
+    all_comments = PitchComments.query.filter_by(pitch_id = pitch_id).all()
     return render_template('pitches.html',form=form) 
 
-    
+
+@main.route('/pitch/upvote/<int:pitch_id>/upvote', methods=['GET','POST']) 
+@login_required 
+def upvote(pitch_id):
+    pitch=Pitch.query.get(pitch_id)
+    user=current_user
+    pitch_upvotes=Upvotes.query.filter_by(pitch_id=pitch_id)
+
+    if Upvotes.query.filter(Upvotes.user_id==user.id,Upvotes.pitch_id==pitch_upvotes).first():
+        return redirect(url_for('main.index'))
+
+    new_upvote=Upvotes(pitch_id=pitch_id, user =current_user)
+    new_upvote= save_upvotes()
+    return redirect(url_for('main.index')) 
+
+
 
 
