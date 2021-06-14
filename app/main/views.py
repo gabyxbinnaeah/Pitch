@@ -45,6 +45,26 @@ def new_pitch():
     all_comments = PitchComments.query.filter_by(pitch_id = pitch_id).all()
     return render_template('pitches.html',form=form) 
 
+@main.route('/comment/new/<int:pitch_id>', methods = ['GET','POST'])
+@login_required
+def new_comment(pitch_id):
+    form = PitchCommentsForm() 
+    pitch=Pitch.query.get(pitch_id)
+    if form.validate_on_submit():
+        description = form.description.data
+
+        new_comment = PitchComments(description = description, user_id = current_user._get_current_object().id, pitch_id = pitch_id)
+        db.session.add(new_comment)
+        db.session.commit()
+
+
+        return redirect(url_for('.new_comment', pitch_id= pitch_id))
+
+    all_comments = PitchComments.query.filter_by(pitch_id = pitch_id).all()
+    return render_template('comments.html', form = form, comment = all_comments, pitch = pitch )
+
+
+
 
 @main.route('/pitch/upvote/<int:pitch_id>/upvote', methods=['GET','POST']) 
 @login_required 
