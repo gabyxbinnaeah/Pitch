@@ -49,8 +49,8 @@ class PitchComments(db.Model):
 class  Upvotes(db.Model):
 
     __tablename__="upvotes"
-    
-    id=db.Column(db.Integer,)
+
+    id=db.Column(db.Integer,primary_key=True)
     upvote=db.Column(db.Integer,default=1)
     pitch_id=db.Column(db.Integer,db.ForeignKey("pitches.id")) 
     user_id=db.Column(db.Integer,db.ForeignKey("users.id"))  
@@ -75,7 +75,7 @@ class  Upvotes(db.Model):
     def __repr__(self):
         return f'{self.user_id}:{self.pitch_id}'
 
-class Downvotes(db.model):
+class Downvotes(db.Model):
     __tablename__ ="downvotes"
 
     id=db.Column(db.Integer,primary_key=True)
