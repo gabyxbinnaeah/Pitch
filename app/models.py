@@ -46,7 +46,10 @@ class PitchComments(db.Model):
     date_posted=db.Column(db.DateTime,default=datetime.utcnow) 
 
 
-class  Upvotes(db.model):
+class  Upvotes(db.Model):
+
+    __tablename__="upvotes"
+    
     id=db.Column(db.Integer,)
     upvote=db.Column(db.Integer,default=1)
     pitch_id=db.Column(db.Integer,db.ForeignKey("pitches.id")) 
@@ -62,7 +65,7 @@ class  Upvotes(db.model):
 
     @classmethod
     def get_upvotes(cls,id):
-        upvote=Upvote.query.filter_by(pitch_id=id).all()
+        upvote=Upvotes.query.filter_by(pitch_id=id).all()
 
     @classmethod
     def get_all_upvotes(cls,id):
@@ -73,6 +76,8 @@ class  Upvotes(db.model):
         return f'{self.user_id}:{self.pitch_id}'
 
 class Downvotes(db.model):
+    __tablename__ ="downvotes"
+
     id=db.Column(db.Integer,primary_key=True)
     downvotes=db.Column(db.Integer,default=1)
     user_id=db.Column(db.Integer,db.ForeignKey("users.id")) 
@@ -82,6 +87,21 @@ class Downvotes(db.model):
         db.session.add(self)
         db.session.commit()
 
+    def add_downvote(cls,id):
+        downvotes=Downvotes(user=current_user, pitch_id=id)
+        downvotes.save_downvote() 
+    
+    @classmethod
+    def get_downvotes(cls,id):
+        downvotes=Downvotes.query.filter_by(pitch_id=id).all()
+
+    @classmethod
+    def get_all_downvotes(cls,pitch_id):
+        downvotes=Downvotes.query.order_by("id").all() 
+        return downvotes
+
+    def __repr__(self):
+        return f'{self.user_id}:{self.pitch_id}'
     
   
 
@@ -118,30 +138,9 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return f'User {self.username}'
 
+ 
 
-class Role(db.Model):
-    '''
-    defines the role of each user in the user model 
-    '''
 
-    __tablename__="roles"
-
-    id = db.Column(db.Integer,primary_key=True)
-    name = db.Column(db.String(30))
-    users = db.relationship('User',backref='users',lazy= "dynamic")
-        #method returns a string containing a printable representation of an object.
-    def __repr__(self):
-        return f'User {self.name}' 
-
-class PhotoProfile(db.Model):
-    '''
-    model that defines profile photos for user account
-    '''
-    __tablename__ ="photos"
-
-    id=db.Column(db.Integer,primary_key=True)
-    pic_path=db.Column(db.String())
-    user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
       
 
 
