@@ -73,7 +73,16 @@ class  Upvotes(db.model):
         return f'{self.user_id}:{self.pitch_id}'
 
 class Downvotes(db.model):
-    i
+    id=db.Column(db.Integer,primary_key=True)
+    downvotes=db.Column(db.Integer,default=1)
+    user_id=db.Column(db.Integer,db.ForeignKey("users.id")) 
+    pitch_id=db.Column(db.Integer,db.ForeignKey("pitches.id"))
+
+    def save_downvote(self):
+        db.session.add(self)
+        db.session.commit()
+
+    
   
 
 
