@@ -83,13 +83,13 @@ class Downvotes(db.Model):
     user_id=db.Column(db.Integer,db.ForeignKey("users.id")) 
     pitch_id=db.Column(db.Integer,db.ForeignKey("pitches.id"))
 
-    def save_downvote(self):
+    def save_downvotes(self):
         db.session.add(self)
         db.session.commit()
 
     def add_downvote(cls,id):
         downvotes=Downvotes(user=current_user, pitch_id=id)
-        downvotes.save_downvote() 
+        downvotes.save_downvotes() 
     
     @classmethod
     def get_downvotes(cls,id):
