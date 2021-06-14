@@ -7,12 +7,24 @@ class Config:
     SECRET_KEY=os.environ.get('SECRET_KEY')
     SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://moringa:silfanus12@localhost/pitch'
 
+      # simple mde  configurations
+    SIMPLEMDE_JS_IIFE = True
+    SIMPLEMDE_USE_CDN = True
+
 class ProdConfig(Config):
     '''
     Method that provides setting for production
 
     Args: 
          Permits child class to inherit from class Config
+    '''
+    pass
+
+class TestConfig(Config):
+    '''
+    Testing configuration child class
+    Args:
+        Config: The parent configuration class with General configuration settings 
     '''
     pass
 class DevConfig(Config):
@@ -24,7 +36,10 @@ class DevConfig(Config):
 
     DEBUG=True
 
-config_options={
-'production':ProdConfig,
-'development':DevConfig
+
+
+config_options = {
+    'development': DevConfig,
+    'production': ProdConfig,
+    'test': TestConfig
 }
