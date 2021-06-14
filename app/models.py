@@ -60,8 +60,20 @@ class  Upvotes(db.model):
         upvote_pitch= Upvotes(user=current_user,pitch_id=id) 
         upvote_pitch.save_upvotes()
 
+    @classmethod
+    def get_upvotes(cls,id):
+        upvote=Upvote.query.filter_by(pitch_id=id).all()
 
+    @classmethod
+    def get_all_upvotes(cls,id):
+        upvotes=Upvotes.query.order_by('id').all()
+        return Upvotes
 
+    def __repr__(self):
+        return f'{self.user_id}:{self.pitch_id}'
+
+class Downvotes(db.model):
+    i
   
 
 
