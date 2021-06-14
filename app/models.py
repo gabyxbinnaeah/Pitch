@@ -16,17 +16,22 @@ class Pitch(db.Model):
     __tablename__='pitches' 
 
     id=db.Column(db.Integer, primary_key=True)
-    title=db.Column(db.String(255))
-    category=db.Column(db.String(255))
-    content=db.Column(db.String(255))
-    date_posted=db.Column(db.DateTime,default=datetime.utcnow)
-    votes_id=db.Column(db.Integer,db.ForeignKey("votes.id"))
-    posted_by=db.Column(db.Integer,db.ForeignKey("users.id"))
-    users=db.relationship('User',backref="user",lazy="dynamic")
+    user_id=db.Column(db.Integer, primary_key=True)
+    title=db.Column(db.String())
+    category=db.Column(db.String(255), nullable=False)
+    description=db.Column(db.String(255), index=True)
     pitchescomment=db.relationship('PitchComments',backref ='pitchescomment',lazy= "dynamic")
+    date_posted=db.Column(db.DateTime,default=datetime.utcnow)
+    upvotes=db.relationship('Upvotes', backref ='user',lazy= "dynamic")
+    downvotes=db.relationship('Down',backref='user',lazy= "dynamic")
 
+    @classmethod
+    def get_pitches(cls,id):
+        pitches=Pitch.query.order_by(pitch_id=id).desc().all()
+        return pitches
 
-
+    def  __repr__(self):
+        return f'Pitch {self.description}'
 
 class PitchComments(db.Model):
     '''
@@ -73,16 +78,14 @@ class User(UserMixin, db.Model):
 
     id=db.Column(db.Integer,primary_key=True)
     username=db.Column(db.String(255))
-    user_bio=db.Column(db.String(255))
-    photos=db.relationship('PhotoProfile',backref ='user',lazy= "dynamic")
-    pitches=db.relationship('Pitch', backref ='pitches',lazy= "dynamic")
-    pitchcomments=db.relationship('PitchComments',backref ='pitchcomments',lazy= "dynamic")
-    pitch_id=db.Column(db.Integer,db.ForeignKey("pitches.id"))
-    votes=db.relationship('Votes',backref ='votes',lazy= "dynamic")
     email=db.Column(db.String(),unique = True,index = True)
-    role_id=db.Column(db.Integer,db.ForeignKey("roles.id"))
-    password_hash=db.Column(db.String(255)) 
-    
+    password_hash=db.Column(db.String(255))
+    pitches=db.relationship('Pitch', backref ='user',lazy= "dynamic")
+    pitchcomments=db.relationship('PitchComments',backref ='user',lazy= "dynamic")
+    downvotes=db.relationship('Downvotes',backref='user',lazy= "dynamic")
+    upvotes=db.relationship('Upvotes',backref='user',lazy= "dynamic")
+
+
     @property
     def password(self):
         raise AttributeError('You can not acess  the password attribute')
