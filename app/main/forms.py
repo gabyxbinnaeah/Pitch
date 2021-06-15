@@ -3,7 +3,7 @@ from wtforms import StringField,PasswordField,SubmitField,BooleanField,SubmitFie
 from wtforms.validators import Required,Email,EqualTo
 from wtforms import ValidationError 
 
-class PitForm(FlaskForm):
+class PitchForm(FlaskForm):
     title=StringField('Pitch title', validators=[Required()])
     description=TextAreaField("What would you like to pitch in one minute?", validators=[Required()])
     category=RadioField('Label', choices=[('businesspitch','businesspitch'),('interviewpitch','interviewpitch'),('politicalpitch','politicalpitch'),('religiouspitch','religiouspitch')],validators=[Required()])
@@ -19,3 +19,7 @@ class UpvotesForm(FlaskForm):
 
 class DownvotesForm(FlaskForm):
     Submit=SubmitField() 
+
+class UpdateProfile(FlaskForm):
+    bio = TextAreaField('Tell us about you.',validators = [Required()])
+    submit = SubmitField('Submit') 

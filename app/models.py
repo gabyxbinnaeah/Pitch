@@ -1,13 +1,13 @@
 from werkzeug.security import generate_password_hash,check_password_hash
 from . import db
 from flask_login import UserMixin
-# from . import login_manager 
+from . import login_manager 
 from datetime import datetime 
 
 
-# @login_manager.user_loader
-# def load_user(user_id):
-#     return User.query.get(int(user_id)) 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id)) 
 
 class Pitch(db.Model):
     '''
@@ -16,14 +16,15 @@ class Pitch(db.Model):
     __tablename__='pitches' 
 
     id=db.Column(db.Integer, primary_key=True)
-    user_id=db.Column(db.Integer, primary_key=True)
+    user_id=db.Column(db.Integer,db.ForeignKey("users.id"))
     title=db.Column(db.String())
     category=db.Column(db.String(255), nullable=False)
     description=db.Column(db.String(255), index=True)
+    email = db.Column(db.String(255),unique = True,index = True)
     pitchescomment=db.relationship('PitchComments',backref ='pitchescomment',lazy= "dynamic")
     date_posted=db.Column(db.DateTime,default=datetime.utcnow)
-    upvotes=db.relationship('Upvotes', backref ='user',lazy= "dynamic")
-    downvotes=db.relationship('Downvotes',backref='user',lazy= "dynamic")
+    upvotes=db.relationship('Upvotes', backref ='downvote',lazy= "dynamic")
+    downvotes=db.relationship('Downvotes',backref='upvote',lazy= "dynamic")  
 
     @classmethod
     def get_pitches(cls,id):
@@ -40,10 +41,10 @@ class PitchComments(db.Model):
     __tablename__='comments'
 
     id=db.Column(db.Integer,primary_key=True)
-    pitch_id=db.Column(db.Integer,db.ForeignKey("pitches.id"))
-    user_id=db.Column(db.Integer,db.ForeignKey("users.id"))
     description=db.Column(db.String())  
     date_posted=db.Column(db.DateTime,default=datetime.utcnow) 
+    pitch_id=db.Column(db.Integer,db.ForeignKey("pitches.id"))
+    user_id=db.Column(db.Integer,db.ForeignKey("users.id"))
 
 
 class  Upvotes(db.Model):
@@ -57,20 +58,20 @@ class  Upvotes(db.Model):
 
     def save_upvotes(self):
         db.session.add(self)
-        db.session.commit() 
+        db.session.commit()
 
-    def add_upvotes(cls,id):
-        upvote_pitch= Upvotes(user=current_user,pitch_id=id) 
-        upvote_pitch.save_upvotes()
-
+    def add_upvote(cls,id):
+        upvote_pitch=Upvotes(user_id=current_user, pitch_id=id)
+        upvote_pitch.save_upvotes() 
+    
     @classmethod
     def get_upvotes(cls,id):
         upvote=Upvotes.query.filter_by(pitch_id=id).all()
 
     @classmethod
-    def get_all_upvotes(cls,id):
-        upvotes=Upvotes.query.order_by('id').all()
-        return Upvotes
+    def get_all_upvotes(cls,pitch_id):
+        upvotes=Upvotes.query.order_by("id").all() 
+        return upvotes
 
     def __repr__(self):
         return f'{self.user_id}:{self.pitch_id}'
@@ -116,11 +117,13 @@ class User(UserMixin, db.Model):
     id=db.Column(db.Integer,primary_key=True)
     username=db.Column(db.String(255))
     email=db.Column(db.String(),unique = True,index = True)
+    profile_pic_path = db.Column(db.String())
+    bio = db.Column(db.String(255))
     password_hash=db.Column(db.String(255))
-    pitches=db.relationship('Pitch', backref ='user',lazy= "dynamic")
-    pitchcomments=db.relationship('PitchComments',backref ='user',lazy= "dynamic")
-    downvotes=db.relationship('Downvotes',backref='user',lazy= "dynamic")
-    upvotes=db.relationship('Upvotes',backref='user',lazy= "dynamic")
+    pitches=db.relationship('Pitch', backref ='pitches',lazy= "dynamic")
+    pitchcomments=db.relationship('PitchComments',backref ='pitchcomment',lazy= "dynamic")
+    downvotes=db.relationship('Downvotes',backref='dislikes',lazy= "dynamic")
+    upvotes=db.relationship('Upvotes',backref='likes',lazy= "dynamic")
 
 
     @property

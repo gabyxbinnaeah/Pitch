@@ -9,7 +9,7 @@
 			<div class="card-body">
 				<blockquote class="blockquote mb-0">
 					<h2>{{category.description}}</h2>
-					<footer class="blockquote-footer"> Posted by {{category.user.username}}</footer>
+					<footer class="blockquote-footer"> Posted by {{category. user_id.username}}</footer>
 				</blockquote>
 				
 				<a href="{{url_for('main.new_comment',pitch_id = category.id)}}" class="btn btn-info"> Add a pitch comment</a>
