@@ -18,9 +18,9 @@ ___
 ### A user can be signed in order to leave a comment
 ### A user receives a welcoming email once signed up.
 
-### As a user, I would like to comment on the different pitches and leave feedback.
-### As a user, I would like to submit a pitch in any category.
-### As a user, I would like to view the different categories.
+### A user can comment on the different pitches and leave feedback.
+### A user can submit a pitch in any category.
+### A user can view the different categories.
 
 ___
 
@@ -44,3 +44,8 @@ ___
 ### pip install -r requirements.tx
 
 ### git clone: https://github.com/gabyxbinnaeah/Pitch.git
+
+___
+
+#Live link
+

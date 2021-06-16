@@ -1,5 +1,6 @@
 {% macro display(category_list) %}
-<div class="row">
+
+<div class="row backimage"> 
 	{% if category_list %}
 		{% for category in category_list %}
 		<div class="col-md-6">
@@ -30,7 +31,7 @@
 
 
 {% macro displayComment(comments) %}
-<ul>
+    <ul>
 
 			{% if comments %}
 			{% for comment in comments %}
