@@ -5,7 +5,7 @@ class Config:
     a method that provides general settings for application
     '''
     SECRET_KEY=os.environ.get('SECRET_KEY')
-    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://moringa:silfanus12@localhost/pitch'
+    
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     UPLOADED_PHOTOS_DEST ='app/static/photos'
       # simple mde  configurations
@@ -44,7 +44,9 @@ class DevConfig(Config):
     Args: 
          enable child class to inherit from parent class 
     '''
-
+    
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://moringa:silfanus12@localhost/pitch'
+    
     DEBUG=True
 
 
