@@ -5,21 +5,21 @@
 		{% for category in category_list %}
 		<div class="col-md-6">
 			<div class="thumbnail text-center">
-			<h5 class="card-header">{{category.title}}</h5>
-			<h5 class="card-header">{{category.category}}</h5>
-			<div class="card-body">
-				<blockquote class="blockquote mb-0">
-					<h2>{{category.description}}</h2>
-					<footer class="blockquote-footer"> Posted by {{category.user_id.username}}</footer>
-				</blockquote>
-				
-				<a href="{{url_for('main.new_comment',pitch_id = category.id)}}" class="btn btn-info"> Add a comment</a>
-				<a href="{{url_for('main.upvote',pitch_id = category.id)}}" class= "btn btn-primary btn-sm"><i></i>Upvote <span>{{category.upvotes.count()}}</span></a>
-				<a href="{{url_for('main.downvote',pitch_id = category.id)}}" class= "btn btn-danger btn-sm"><i class="far fa-thumbs-up"></i>Downvote <span>{{category.downvotes.count()}}</span></a>
+				<h3 class="card-header text-success">{{category.title.upper()}}</h3>
+				<h3 class="card-header text-success">{{category.category.upper()}}</h3>
+				<div class="card-body">
+					<blockquote class="blockquote mb-0">
+						<h2>{{category.description}}</h2>
+						<!-- <footer class="blockquote-footer"> Posted by {{category.user_id.username}}</footer> -->
+					</blockquote>
+					
+					<a href="{{url_for('main.new_comment',pitch_id = category.id)}}" class="btn btn-info"> Add a comment</a>
+					<a href="{{url_for('main.upvote',pitch_id = category.id)}}" class= "btn btn-primary btn-sm"><i></i>Upvote <span>{{category.upvotes.count()}}</span></a>
+					<a href="{{url_for('main.downvote',pitch_id = category.id)}}" class= "btn btn-danger btn-sm"><i class="far fa-thumbs-up"></i>Downvote <span>{{category.downvotes.count()}}</span></a>
 
 
-			</div>
-		</div>
+				</div>
+		    </div>
 
 		</div>
 		{% endfor %}
@@ -37,7 +37,7 @@
 			{% for comment in comments %}
 				<div class="row text-center">
 						<a><p style="color: brown">{{ comment.description }}</p></a>
-						<small> posted by {{comment.user.username}}</small>
+						<!-- <small> posted by {{comment.user_id.username}}</small> -->
 				</div>
 			{% endfor %}
 			{% else %}

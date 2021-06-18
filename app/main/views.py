@@ -61,7 +61,7 @@ def new_comment(pitch_id):
         return redirect(url_for('.new_comment', pitch_id= pitch_id))
 
     all_comments = PitchComments.query.filter_by(pitch_id = pitch_id).all()
-    return render_template('comments.html', form = form, comment = all_comments, pitch = pitch )
+    return render_template('comments.html', form = form, comment = all_comments, pitch = pitch)
 
 
 
