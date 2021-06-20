@@ -7,9 +7,9 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <ul>
+            <!-- <ul>
             <a  class="navbar-brand  text-success" href="/pitches/new/"> ADD NEW PITCH </a>
-            </ul>
+            </ul> -->
         </div>
         <div class="navbar-nav"></div>
         <div class="navbar-nav">
@@ -28,7 +28,10 @@
           <li><a class="text-primary" href="{{url_for('auth.login')}}">Sign in</a></li>
           {%endif%}
         </ul>
-      </div>
+        </div>
+
+       
+        
 
 
       <div class="navbar-collapse collapse">
@@ -37,7 +40,19 @@
             <li><a style="color: whitesmoke;"  href="{{url_for('auth.logout')}}"></a></li>
             <li><a style="color: whitesmoke;" href="{{url_for('auth.login')}}"></a></li>
           </ul>
-        </div>
+      </div>
       
+    </div>
 </div>
-</div>
+<!-- <div>
+  <a  class="navbar-brand  text-success" href="/pitches/new/" style="color:green;" > ADD NEW PITCH <span style="color:green; font-weight:700px;font-size:30px">+</span></a>
+</div>  -->
+<hr>
+<div class="row">
+  <div class="col-md-3 text-center">   
+    <a  class="navbar-brand  text-success " href="/pitches/new/" style="color:green;" > ADD NEW PITCH <span style="color:green; font-weight:700px;font-size:30px">+</span></a> 
+  </div>
+  <div class="col-md-9"></div>
+  
+</div> 
+<hr>
