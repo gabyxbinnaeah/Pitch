@@ -5,7 +5,8 @@
 		{% for category in category_list %}
 		<div class="col-md-12">
 			
-			<div class="thumbnail text-center" id="backimage" style="background-image: url('https://images.unsplash.com/photo-1593642634524-b40b5baae6bb?ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1489&q=80');
+			<div class="thumbnail text-center" id="backimage" 
+			style="background-image: url('https://images.unsplash.com/photo-1624285206507-92894310aabf?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1868&q=80');
 			 background-repeat: no-repeat;background-size:cover; background-position:center center; color:white; height:400px;width:100%;"> 
 				<div class="panel-header text-danger" style="font-size:30px;"><h1>{{category.title.upper()}}</h1></div>
 				<div class="panel-header text-danger"><h1>{{category.category.upper()}}</h1></div>
@@ -13,7 +14,7 @@
 					<h2>{{category.description}}</h2>
 				</div>
 				<div class="panel-footer">
-					<a href="{{url_for('main.new_comment',pitch_id = category.id)}}" class="btn btn-warning"> Add a comment</a>
+					<a href="{{url_for('main.new_comment',pitch_id = category.id)}}" class="btn btn-warning btn-lg"> Add a comment</a>
 					<a href="{{url_for('main.upvote',pitch_id = category.id)}}" class= "btn btn-warning btn-lg"><span class="glyphicon glyphicon-thumbs-up"></span> <span>{{category.upvotes.count()}}</span></a>
 					<a href="{{url_for('main.downvote',pitch_id = category.id)}}" class= "btn btn-warning btn-lg"><span class="glyphicon glyphicon-thumbs-down"></span><span>{{category.downvotes.count()}}</span></a>
 				</div>
