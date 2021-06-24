@@ -1,24 +1,23 @@
 {% macro display(category_list) %}
 
-<div class="row backimage"> 
+<div class="row" > 
 	{% if category_list %}
 		{% for category in category_list %}
-		<div class="col-md-6">
-			<div class="thumbnail text-center">
-				<h3 class="card-header text-success">{{category.title.upper()}}</h3>
-				<h3 class="card-header text-success">{{category.category.upper()}}</h3>
-				<div class="card-body">
-					<blockquote class="blockquote mb-0">
-						<h2>{{category.description}}</h2>
-						<!-- <footer class="blockquote-footer"> Posted by {{category.user_id.username}}</footer> -->
-					</blockquote>
-					
-					<a href="{{url_for('main.new_comment',pitch_id = category.id)}}" class="btn btn-info"> Add a comment</a>
-					<a href="{{url_for('main.upvote',pitch_id = category.id)}}" class= "btn btn-primary btn-sm"><i></i>Upvote <span>{{category.upvotes.count()}}</span></a>
-					<a href="{{url_for('main.downvote',pitch_id = category.id)}}" class= "btn btn-danger btn-sm"><i class="far fa-thumbs-up"></i>Downvote <span>{{category.downvotes.count()}}</span></a>
-
-
+		<div class="col-md-12">
+			
+			<div class="thumbnail text-center" id="backimage" style="background-image: url('https://images.unsplash.com/photo-1593642634524-b40b5baae6bb?ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1489&q=80');
+			 background-repeat: no-repeat;background-size:cover; background-position:center center; color:white; height:400px;width:100%;"> 
+				<div class="panel-header text-danger" style="font-size:30px;"><h1>{{category.title.upper()}}</h1></div>
+				<div class="panel-header text-danger"><h1>{{category.category.upper()}}</h1></div>
+				<div class="panel-body">
+					<h2>{{category.description}}</h2>
 				</div>
+				<div class="panel-footer">
+					<a href="{{url_for('main.new_comment',pitch_id = category.id)}}" class="btn btn-warning"> Add a comment</a>
+					<a href="{{url_for('main.upvote',pitch_id = category.id)}}" class= "btn btn-warning btn-lg"><span class="glyphicon glyphicon-thumbs-up"></span> <span>{{category.upvotes.count()}}</span></a>
+					<a href="{{url_for('main.downvote',pitch_id = category.id)}}" class= "btn btn-warning btn-lg"><span class="glyphicon glyphicon-thumbs-down"></span><span>{{category.downvotes.count()}}</span></a>
+				</div>
+					
 		    </div>
 
 		</div>
@@ -36,13 +35,13 @@
 			{% if comments %}
 			{% for comment in comments %}
 				<div class="row text-center">
-						<a><p style="color: brown">{{ comment.description }}</p></a>
-						<!-- <small> posted by {{comment.user_id.username}}</small> -->
+						<a><h5 style="color: blue">{{ comment.description }}</h5></a>
+						<a href="{{url_for('main.deleteComment',id=comment.id)}}">DELETE COMMENT</a>
 				</div>
 			{% endfor %}
 			{% else %}
 
-			<h3>This post does  not does not have any comments yet !</h3>
+			<h3>This post has no comment</h3>
 			{%endif%}
 
 	</ul>

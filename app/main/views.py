@@ -6,7 +6,12 @@ from ..models import Pitch, User,PitchComments,Upvotes,Downvotes
 from .forms import PitchForm,PitchCommentsForm,UpvotesForm,DownvotesForm,UpdateProfile
 from flask.views import View,MethodView
 from .. import db,photos
+from flask import Flask,render_template
+from ..request import getQuotes
 import markdown2 
+
+
+
 
 #Views
 @main.route('/', methods= ['GET','POST'])
@@ -14,6 +19,8 @@ def index():
     '''
     view page function that returns index page and its data
     '''
+    quotes=getQuotes() 
+
     pitch=Pitch.query.filter_by().first() 
     title='Home'
     businesspitch=Pitch.query.filter_by(category="businesspitch")
@@ -23,14 +30,14 @@ def index():
 
     upvotes=Upvotes.get_all_upvotes(id)  
 
-    return render_template('home.html',title=title,pitch=pitch,businesspitch=businesspitch,interviewpitch=interviewpitch,politicalpitch=politicalpitch,religiouspitch=religiouspitch)
+    return render_template('home.html',title=title,pitch=pitch,businesspitch=businesspitch,interviewpitch=interviewpitch,politicalpitch=politicalpitch,religiouspitch=religiouspitch,quotes=quotes)
 
 
 @main.route('/pitches/new/', methods=['GET','POST'])
 @login_required
 def new_pitch():
     form = PitchForm()
-    my_upvotes=Upvotes.query.filter_by(pitch_id=Pitch.id)
+    my_upvotes=my_upvotes=Upvotes.query.filter_by(pitch_id=Pitch.id)
     if form.validate_on_submit():
         description=form.description.data
         title=form.title.data 
@@ -44,6 +51,35 @@ def new_pitch():
         return redirect(url_for('main.index')) 
     
     return render_template('pitches.html',form=form) 
+
+ #update 
+@main.route('/update/<int:id>', methods=['GET', 'POST'])
+@login_required
+def updateBlog(id):
+    blog = Blog.query.get_or_404(id)
+    form = BlogForm()
+    if form.validate_on_submit():
+        blog.title_blog = form.blogTitle.data
+        blog.description = form.blogDescription.data
+        db.session.add(blog)
+        db.session.commit()
+        return redirect(url_for('main.allBlogs'))
+    elif request.method == 'GET':
+        form.blogTitle.data = blog.title_blog
+        form.blogDescription.data = blog.description
+    return render_template('updateBlog.html', form=form)
+
+
+
+# delete comment
+@main.route('/delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+def deleteComment(id):
+    comment =PitchComments.query.get_or_404(id)
+    db.session.delete(comment)
+    db.session.commit()
+    flash('comment succesfully deleted')
+    return redirect (url_for('main.index'))
 
 @main.route('/comment/new/<int:pitch_id>', methods = ['GET','POST'])
 @login_required
@@ -136,4 +172,11 @@ def update_pic(uname):
         path = f'photos/{filename}'
         user.profile_pic_path = path
         db.session.commit()
-    return redirect(url_for('main.profile',uname=uname))
+    return redirect(url_for('main.profile',uname=uname)) 
+
+
+# @main.route('/', methods=['GET'])
+# def quotesDisplay():
+    
+
+#     return render_template('quote.html',quotes =quotes)
